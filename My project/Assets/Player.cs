@@ -7,13 +7,15 @@ public class Player : MonoBehaviour
     [SerializeField] int speed = 5;
     [SerializeField] float jump = 0;
     [SerializeField] float gravity = 0.5f;
-    [SerializeField] float jumpHeight = 25f;
+    [SerializeField] float jumpHeight = 50f;
 
+    public Vector3 moving;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        moving = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -21,19 +23,16 @@ public class Player : MonoBehaviour
     {
         //Vector3 input = new Vector3();
         //transform.position += new Vector3(0, 5, 0) * Time.deltaTime;
-        transform.position += new Vector3(Input.GetAxis("Horizontal") * 2, jump, Input.GetAxis("Vertical") * 2) * Time.deltaTime;
+        moving = transform.position += new Vector3(Input.GetAxis("Horizontal") * 2, 0, Input.GetAxis("Vertical") * 2) * Time.deltaTime;
+        moving*= speed;
+        
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButton("Jump"))
         {
-            jump += jumpHeight;
+            moving = transform.position += new Vector3(0, Input.GetAxis("Jump") * 4, 0) * Time.deltaTime;
         }
-        if(jump > 0)
-        {
-            jump -= gravity;
-        }
-        if( jump < 0)
-        {
-            jump = 0;
-        }
+        
+
+        moving.y -= gravity * Time.deltaTime;
     }
 }
